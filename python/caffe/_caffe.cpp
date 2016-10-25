@@ -263,6 +263,11 @@ BOOST_PYTHON_MODULE(_caffe) {
         bp::with_custodian_and_ward<1, 2, bp::with_custodian_and_ward<1, 3> >())
     .def("save", &Net_Save);
 
+// From  https://github.com/BVLC/caffe/issues/3494
+// Fix for caffe pythonwrapper for boost 1.6
+  bp::register_ptr_to_python<shared_ptr<Net<Dtype> > >();
+// End fix
+
   bp::class_<Blob<Dtype>, shared_ptr<Blob<Dtype> >, boost::noncopyable>(
     "Blob", bp::no_init)
     .add_property("shape",
@@ -281,6 +286,12 @@ BOOST_PYTHON_MODULE(_caffe) {
           NdarrayCallPolicies()))
     .add_property("diff",     bp::make_function(&Blob<Dtype>::mutable_cpu_diff,
           NdarrayCallPolicies()));
+
+// From  https://github.com/BVLC/caffe/issues/3494
+// Fix for caffe pythonwrapper for boost 1.6
+  bp::register_ptr_to_python<shared_ptr<Blob<Dtype> > >();
+// End fix
+
 
   bp::class_<Layer<Dtype>, shared_ptr<PythonLayer<Dtype> >,
     boost::noncopyable>("Layer", bp::init<const LayerParameter&>())
@@ -305,6 +316,11 @@ BOOST_PYTHON_MODULE(_caffe) {
     .def("step", &Solver<Dtype>::Step)
     .def("restore", &Solver<Dtype>::Restore)
     .def("snapshot", &Solver<Dtype>::Snapshot);
+
+// From  https://github.com/BVLC/caffe/issues/3494
+// Fix for caffe pythonwrapper for boost 1.6
+  bp::register_ptr_to_python<shared_ptr<Solver<Dtype> > >();
+// End fix
 
   bp::class_<SGDSolver<Dtype>, bp::bases<Solver<Dtype> >,
     shared_ptr<SGDSolver<Dtype> >, boost::noncopyable>(
